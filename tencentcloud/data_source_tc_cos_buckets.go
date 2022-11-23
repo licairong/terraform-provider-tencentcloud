@@ -17,6 +17,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -422,7 +423,7 @@ func dataSourceTencentCloudCosBucketsRead(d *schema.ResourceData, meta interface
 		}
 
 		bucket["tags"] = respTags
-		bucket["cos_bucket_url"] = fmt.Sprintf("%s.cos.%s.myqcloud.com", *v.Name, meta.(*TencentCloudClient).apiV3Conn.Region)
+		bucket["cos_bucket_url"] = fmt.Sprintf("%s.cos.%s.%s", *v.Name, meta.(*TencentCloudClient).apiV3Conn.Region, os.Getenv("TENCENTCLOUD_COS_DOMAIN"))
 		bucketList = append(bucketList, bucket)
 	}
 

@@ -97,6 +97,11 @@ func resourceTencentCloudNatGateway() *schema.Resource {
 				Computed:    true,
 				Description: "Create time of the NAT gateway.",
 			},
+			"zone": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Zone.",
+			},
 		},
 	}
 }
@@ -108,6 +113,10 @@ func resourceTencentCloudNatGatewayCreate(d *schema.ResourceData, meta interface
 	request := vpc.NewCreateNatGatewayRequest()
 	vpcId := d.Get("vpc_id").(string)
 	natGatewayName := d.Get("name").(string)
+	zone := d.Get("zone").(string)
+	if len(zone) > 0 {
+		request.Zone = &zone
+	}
 	request.VpcId = &vpcId
 	request.NatGatewayName = &natGatewayName
 	//test default value

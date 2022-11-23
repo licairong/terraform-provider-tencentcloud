@@ -240,6 +240,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"os"
 	"reflect"
 	"time"
 
@@ -815,7 +816,7 @@ func resourceTencentCloudCosBucketRead(d *schema.ResourceData, meta interface{})
 		_ = d.Set("multi_az", true)
 	}
 
-	cosBucketUrl := fmt.Sprintf("%s.cos.%s.myqcloud.com", d.Id(), meta.(*TencentCloudClient).apiV3Conn.Region)
+	cosBucketUrl := fmt.Sprintf("%s.cos.%s.%s", d.Id(), meta.(*TencentCloudClient).apiV3Conn.Region, os.Getenv("TENCENTCLOUD_COS_DOMAIN"))
 	_ = d.Set("cos_bucket_url", cosBucketUrl)
 	// set bucket in the import case
 	if _, ok := d.GetOk("bucket"); !ok {

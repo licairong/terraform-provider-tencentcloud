@@ -755,7 +755,7 @@ func resourceTencentCloudScfFunctionCreate(d *schema.ResourceData, m interface{}
 					return fmt.Errorf("type if cos, cos_region is required")
 				}
 				// scf cos trigger name format is xxx-1234567890.cos.ap-guangzhou.myqcloud.com
-				tg["name"] = fmt.Sprintf("%s.cos.%s.myqcloud.com", tg["name"].(string), tg["cos_region"].(string))
+				tg["name"] = fmt.Sprintf("%s.cos.%s.%s", tg["name"].(string), tg["cos_region"].(string), os.Getenv("TENCENTCLOUD_COS_DOMAIN"))
 			}
 
 			triggers = append(triggers, scfTrigger{

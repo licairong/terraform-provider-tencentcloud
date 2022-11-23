@@ -150,7 +150,7 @@ func (me *TencentCloudClient) UseCosClient() *s3.S3 {
 	resolver := func(service, region string, optFns ...func(*endpoints.Options)) (endpoints.ResolvedEndpoint, error) {
 		if service == endpoints.S3ServiceID {
 			return endpoints.ResolvedEndpoint{
-				URL:           fmt.Sprintf("https://cos.%s.myqcloud.com", region),
+				URL:           fmt.Sprintf("%s://cos.%s.%s", me.Protocol, region, os.Getenv("TENCENTCLOUD_COS_DOMAIN")),
 				SigningRegion: region,
 			}, nil
 		}
@@ -169,7 +169,7 @@ func (me *TencentCloudClient) UseCosClient() *s3.S3 {
 
 // UseTencentCosClient tencent cloud own client for service instead of aws
 func (me *TencentCloudClient) UseTencentCosClient(bucket string) *cos.Client {
-	u, _ := url.Parse(fmt.Sprintf("https://%s.cos.%s.myqcloud.com", bucket, me.Region))
+	u, _ := url.Parse(fmt.Sprintf("%s://%s.cos.%s.%s", me.Protocol, bucket, me.Region, os.Getenv("TENCENTCLOUD_COS_DOMAIN")))
 
 	if me.tencentCosConn != nil && me.tencentCosConn.BaseURL.BucketURL == u {
 		return me.tencentCosConn
